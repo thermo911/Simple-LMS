@@ -1,17 +1,37 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Информация</title>
-        <meta charset="UTF-8">
+        <title>Аккаунт</title>
+        <!-- Обязательные метатеги -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
         <link rel="stylesheet" href="../styles/styles.css">
     </head>
 
     <body>
-        <h1>Информация о пользователе</h1>
-        <p>Имя</p>
-        <input>
-        <p>Пароль</p>
-        <input type="password">
-        <button>Создать</button>
+        <h1 class="display-1">Информация о пользователе</h1>
+        <div class="container">
+            <div class="row">
+                <form class="form">
+                    <div class="form-group">
+                        <div for="text">Имя пользователя:</div>
+                        <input type="text" class="form-control" placeholder="Введите имя">
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                <form class="form">
+                    <div class="form-group">
+                        <div for="password">Пароль:</div>
+                        <input type="password" class="form-control" placeholder="Введите пароль">
+                    </div>
+                    <button type="button" class="btn btn-outline-success mt-2 float-end">Создать!</button>
+                </form>
+            </div>
+        </div>
     </body>
 </html>
