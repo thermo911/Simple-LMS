@@ -1,0 +1,51 @@
+form div {
+    margin: 7px;
+}
+
+form label {
+    display: block;
+}
+
+.validation-error {
+    display: block;
+    color: red;
+}
+
+.container {
+    display: flex;
+}
+
+.container > div, .container > form {
+    margin: 5px;
+    padding: 5px;
+}
+
+table, td, th {
+    border: 1px solid black;
+}
+
+td {
+    min-width: 100px;
+}
+
+table {
+    border-collapse: collapse;
+    min-width: 400px;
+}
+
+.inline {
+    display: inline;
+}
+
+header > span {
+    display: inline-block;
+    min-width: 150px;
+}
+
+.float-right {
+    float: right;
+}
+
+.active {
+    font-weight: bold;
+}

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>Courses</title>
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<h1>Course table</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Author</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="course : ${courses}">
+        <td th:text="${course.id}">1</td>
+        <td>
+            <a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Course name</a>
+        </td>
+        <td th:text="${course.author}">Course author</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+
+</html>
