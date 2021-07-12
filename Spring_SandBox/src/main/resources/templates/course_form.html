@@ -10,17 +10,19 @@
 
 <body>
 
-<form th:object="${course}">
+<form th:object="${course}" th:method="post" th:action="@{/course}">
     <input type="hidden" th:field="*{id}">
 
     <div>
         <label for="title">Title</label>
         <input type="text" id="title" th:field="*{title}">
+        <small class="validation-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Course title has to be filled</small>
     </div>
 
     <div>
         <label for="author">Author</label>
         <input type="text" id="author" th:field="*{author}">
+        <small class="validation-error" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">Course author has to be filled</small>
     </div>
 
     <div>

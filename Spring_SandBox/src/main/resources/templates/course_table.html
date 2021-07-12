@@ -12,12 +12,17 @@
 
 <h1>Course table</h1>
 
+<div>
+    <a th:href="@{course/new}">New course</a>
+</div>
+
 <table>
     <thead>
     <tr>
         <th>Id</th>
         <th>Title</th>
         <th>Author</th>
+        <th>Action</th>
     </tr>
     </thead>
     <tbody>
@@ -27,6 +32,11 @@
             <a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Course name</a>
         </td>
         <td th:text="${course.author}">Course author</td>
+        <td>
+            <form th:method="delete" th:action="@{/course/{id}(id = ${course.id})}">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>
