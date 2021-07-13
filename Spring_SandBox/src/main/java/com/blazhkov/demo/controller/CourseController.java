@@ -1,8 +1,9 @@
 package com.blazhkov.demo.controller;
 
-import com.blazhkov.demo.dao.CourseRepository;
 import com.blazhkov.demo.domain.Course;
 import com.blazhkov.demo.exception.NotFoundException;
+import com.blazhkov.demo.service.CourseCountUpdater;
+import com.blazhkov.demo.service.CourseLister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -17,22 +18,31 @@ import javax.validation.Valid;
 @RequestMapping("/course")
 public class CourseController {
 
-    private final CourseRepository courseRepository;
+    private final CourseLister courseLister;
+    private final CourseCountUpdater courseCountUpdater;
 
     @Autowired
-    public CourseController(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
+    public CourseController(CourseLister courseLister,
+                            CourseCountUpdater courseCountUpdater) {
+        this.courseLister = courseLister;
+        this.courseCountUpdater = courseCountUpdater;
     }
 
+    /* Mappings */
+
     @GetMapping
-    public String courseTable(Model model) {
-        model.addAttribute("courses", courseRepository.findAll());
+    public String courseTable(Model model,
+                              @RequestParam(name = "titlePrefix", required = false)
+                              String titlePrefix) {
+        model.addAttribute("courses", courseLister.coursesByTitleWithPrefix(
+                titlePrefix == null ? "" : titlePrefix
+        ));
         return "course_table";
     }
 
     @RequestMapping("/{id}")
     public String courseForm(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("course", courseRepository.findById(id)
+        model.addAttribute("course", courseLister.courseById(id)
                 .orElseThrow(NotFoundException::new));
         return "course_form";
     }
@@ -42,7 +52,7 @@ public class CourseController {
         if (bindingResult.hasErrors()) {
             return "course_form";
         }
-        courseRepository.save(course);
+        courseCountUpdater.addCourse(course);
         return "redirect:/course";
     }
 
@@ -54,7 +64,7 @@ public class CourseController {
 
     @DeleteMapping("/{id}")
     public String deleteCourse(@PathVariable("id") Long id) {
-        courseRepository.delete(id);
+        courseCountUpdater.removeCourse(id);
         return "redirect:/course";
     }
 

@@ -9,6 +9,7 @@
 </head>
 
 <body>
+<header th:replace="fragments/header :: header"></header>
 
 <form th:object="${course}" th:method="post" th:action="@{/course}">
     <input type="hidden" th:field="*{id}">

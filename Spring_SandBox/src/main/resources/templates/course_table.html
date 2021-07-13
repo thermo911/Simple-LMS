@@ -9,12 +9,19 @@
 </head>
 
 <body>
-
+<header th:replace="fragments/header :: header"></header>
 <h1>Course table</h1>
 
 <div>
     <a th:href="@{course/new}">New course</a>
 </div>
+
+<form>
+    <label for="titlePrefix" class="inline">Filter by title</label>
+    <input type="text" id="titlePrefix" class="inline" name="titlePrefix"
+           th:value="${param.titlePrefix}"/>
+    <button>Apply</button>
+</form>
 
 <table>
     <thead>
