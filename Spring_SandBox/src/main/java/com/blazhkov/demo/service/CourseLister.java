@@ -18,12 +18,6 @@ public class CourseLister {
         this.repository = repository;
     }
 
-    public List<Course> coursesByAuthor(String name) {
-        List<Course> allCourses = repository.findAll();
-        return allCourses.stream().filter(
-                course -> course.getAuthor().equals(name))
-                .collect(Collectors.toList());
-    }
 
     public List<Course> allCourses() {
         return repository.findAll();

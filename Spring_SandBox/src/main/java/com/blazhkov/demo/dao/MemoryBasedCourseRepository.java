@@ -54,4 +54,5 @@ public class MemoryBasedCourseRepository implements CourseRepository {
                 .stream().filter(course -> course.getTitle().startsWith(prefix))
                 .collect(Collectors.toList());
     }
+
 }

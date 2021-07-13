@@ -2,12 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <header th:fragment="header">
-            <span th:classappend="${activePage == 'courses'} ? active">
-                <a th:href="@{/course}">Courses</a>
-            </span>
-    <span th:classappend="${activePage == 'users'} ? active">
-                <a th:href="@{/user}">User</a>
-            </span>
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <a th:classappend="${activePage == 'courses'} ? active"
+           th:href="@{/course}" role="button" class="btn btn-outline-secondary">Courses</a>
+        <a th:classappend="${activePage == 'users'} ? active"
+           th:href="@{/user}" role="button" class="btn btn-outline-secondary">Users</a>
+    </div>
 </header>
 
 </html>

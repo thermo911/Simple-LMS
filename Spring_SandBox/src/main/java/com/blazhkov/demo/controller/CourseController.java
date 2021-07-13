@@ -37,6 +37,7 @@ public class CourseController {
         model.addAttribute("courses", courseLister.coursesByTitleWithPrefix(
                 titlePrefix == null ? "" : titlePrefix
         ));
+        model.addAttribute("activePage", "courses");
         return "course_table";
     }
 
@@ -44,6 +45,7 @@ public class CourseController {
     public String courseForm(Model model, @PathVariable("id") Long id) {
         model.addAttribute("course", courseLister.courseById(id)
                 .orElseThrow(NotFoundException::new));
+        model.addAttribute("activePage", "none");
         return "course_form";
     }
 
@@ -59,6 +61,7 @@ public class CourseController {
     @RequestMapping("/new")
     public String courseForm(Model model) {
         model.addAttribute("course", new Course());
+        model.addAttribute("activeRage", "none");
         return "course_form";
     }
 

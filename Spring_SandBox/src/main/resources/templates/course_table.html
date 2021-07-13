@@ -1,54 +1,58 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Courses</title>
+        <!-- Обязательные метатеги -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<head>
-    <meta charset="utf-8">
-    <title>Courses</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
-    <link rel="stylesheet" th:href="@{/style.css}">
-</head>
+        <link rel="stylesheet" th:href="@{/style.css}">
+    </head>
 
-<body>
-<header th:replace="fragments/header :: header"></header>
-<h1>Course table</h1>
-<h1 class="shit">SHIT!</h1>
-<p class="shit">iusdcoweiucbo</p>
-<div>
-    <a th:href="@{course/new}">New course</a>
-</div>
-
-<form>
-    <label for="titlePrefix" class="inline">Filter by title</label>
-    <input type="text" id="titlePrefix" class="inline" name="titlePrefix"
-           th:value="${param.titlePrefix}"/>
-    <button>Apply</button>
-</form>
-
-<table>
-    <thead>
-    <tr>
-        <th>Id</th>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="course : ${courses}">
-        <td th:text="${course.id}">1</td>
-        <td>
-            <a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Course name</a>
-        </td>
-        <td th:text="${course.author}">Course author</td>
-        <td>
-            <form th:method="delete" th:action="@{/course/{id}(id = ${course.id})}">
-                <button type="submit">Delete</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
-</body>
-
+    <body>
+        <div class="container">
+            <header th:replace="fragments/header :: header"></header>
+            <h1 class="display-1">Courses</h1>
+            <div class="row">
+                <form th:action="@{/course/new}">
+                    <button type="submit" class="btn btn-outline-success">New course</button>
+                </form>
+            </div>
+            <div class="row">
+                <form>
+                    <label for="titlePrefix" class="inline">Filter by title</label>
+                    <input type="text" id="titlePrefix" class="inline" name="titlePrefix"
+                           th:value="${param.titlePrefix}"/>
+                    <button class="btn btn-success">Apply</button>
+                </form>
+            </div>
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="course : ${courses}">
+                        <td th:text="${course.id}">1</td>
+                        <td>
+                            <a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Course name</a>
+                        </td>
+                        <td th:text="${course.author}">Course author</td>
+                        <td>
+                            <form th:method="delete" th:action="@{/course/{id}(id = ${course.id})}">
+                                <button type="submit" class="btn btn-outline-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
 </html>
