@@ -4,8 +4,9 @@ import com.blazhkov.demo.dao.CourseRepository;
 import com.blazhkov.demo.domain.Course;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class CourseCountUpdater {
     private final CourseRepository repository;
 

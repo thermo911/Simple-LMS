@@ -4,12 +4,13 @@ import com.blazhkov.demo.dao.CourseRepository;
 import com.blazhkov.demo.domain.Course;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class CourseLister {
     private final CourseRepository repository;
 
