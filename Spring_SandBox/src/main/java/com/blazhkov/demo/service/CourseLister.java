@@ -4,11 +4,13 @@ import com.blazhkov.demo.dao.CourseRepository;
 import com.blazhkov.demo.domain.Course;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class CourseLister {
     private final CourseRepository repository;
 
@@ -17,8 +19,16 @@ public class CourseLister {
         this.repository = repository;
     }
 
-    public List<Course> coursesByAuthor(String name) {
-        List<Course> allCourses = repository.findAll();
-        return allCourses.stream().filter(course -> course.getAuthor().equals(name)).collect(Collectors.toList());
+
+    public List<Course> allCourses() {
+        return repository.findAll();
+    }
+
+    public List<Course> coursesByTitleWithPrefix(String prefix) {
+        return repository.findByTitleWithPrefix(prefix);
+    }
+
+    public Optional<Course> courseById(Long id) {
+        return repository.findById(id);
     }
 }
