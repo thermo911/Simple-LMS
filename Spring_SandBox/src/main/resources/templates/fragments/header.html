@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<header th:fragment="header">
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <a th:classappend="${activePage == 'courses'} ? active"
+           th:href="@{/course}" role="button" class="btn btn-outline-secondary">Courses</a>
+        <a th:classappend="${activePage == 'users'} ? active"
+           th:href="@{/user}" role="button" class="btn btn-outline-secondary">Users</a>
+    </div>
+</header>
+
+</html>
