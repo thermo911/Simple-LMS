@@ -20,6 +20,6 @@ public class CourseCountUpdater {
     }
 
     public void removeCourse(Long id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 }

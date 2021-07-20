@@ -1,5 +1,6 @@
 package com.blazhkov.demo.controller;
 
+import com.blazhkov.demo.dao.CourseRepository;
 import com.blazhkov.demo.domain.Course;
 import com.blazhkov.demo.exception.NotFoundException;
 import com.blazhkov.demo.service.CourseCountUpdater;
@@ -23,7 +24,8 @@ public class CourseController {
 
     @Autowired
     public CourseController(CourseLister courseLister,
-                            CourseCountUpdater courseCountUpdater) {
+                            CourseCountUpdater courseCountUpdater,
+                            CourseRepository courseRepository) {
         this.courseLister = courseLister;
         this.courseCountUpdater = courseCountUpdater;
     }
@@ -34,10 +36,12 @@ public class CourseController {
     public String courseTable(Model model,
                               @RequestParam(name = "titlePrefix", required = false)
                               String titlePrefix) {
-        model.addAttribute("courses", courseLister.coursesByTitleWithPrefix(
-                titlePrefix == null ? "" : titlePrefix
-        ));
+
+        if (titlePrefix == null) titlePrefix = "";
+
+        model.addAttribute("courses", courseLister.coursesByTitleWithPrefix(titlePrefix + "%"));
         model.addAttribute("activePage", "courses");
+
         return "course_table";
     }
 
