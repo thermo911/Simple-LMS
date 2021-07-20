@@ -9,13 +9,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CourseLister {
+public class CourseService {
     private final CourseRepository repository;
 
     @Autowired
-    public CourseLister(CourseRepository repository) {
+    public CourseService(CourseRepository repository) {
         this.repository = repository;
     }
+
+    // READ
 
     public List<Course> allCourses() {
         return repository.findAll();
@@ -28,4 +30,17 @@ public class CourseLister {
     public Optional<Course> courseById(Long id) {
         return repository.findById(id);
     }
+
+    // CREATE
+
+    public void saveCourse(Course course) {
+        repository.save(course);
+    }
+
+    // DELETE
+
+    public void removeCourse(Long id) {
+        repository.deleteById(id);
+    }
+
 }
