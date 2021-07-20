@@ -13,28 +13,72 @@
 </head>
 
 <body>
-<div class="contrainer">
+<div class="contrainer"><div class="row">
     <header th:replace="fragments/header :: header"></header>
     <div class="display-1">Edit course</div>
-    <form class="form"th:object="${course}" th:method="post" th:action="@{/course}">
-        <input type="hidden" th:field="*{id}">
+</div>
 
-        <div class="form-group">
-            <label for="title">Title</label>
-            <input class="form-control" type="text" id="title" th:field="*{title}">
-            <small class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Course title has to be filled</small>
+
+    <div class="row">
+        <div class="col-sm">
+            <form class="form" th:object="${course}" th:method="post" th:action="@{/course}">
+                <input type="hidden" th:field="*{id}">
+
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input class="form-control" type="text" id="title" th:field="*{title}">
+                    <small class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Course title has to be filled</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <input class="form-control" type="text" id="author" th:field="*{author}">
+                    <small class="text-danger" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">Course author has to be filled</small>
+                </div>
+
+                <div>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </form>
         </div>
 
-        <div class="form-group">
-            <label for="author">Author</label>
-            <input class="form-control" type="text" id="author" th:field="*{author}">
-            <small class="text-danger" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">Course author has to be filled</small>
-        </div>
 
-        <div>
-            <button type="submit" class="btn btn-success">Submit</button>
+        <div class="col-sm">
+            <div th:unless="${lessons == null}">
+                <div>
+                    <a role="button" class="btn btn-outline-success" th:href="@{/lesson/new(course_id = ${course.id})}">New lesson</a>
+                </div>
+
+                <!-- Здесь должна быть таблица с уроками, которые входят в данный курс -->
+                <table class="table table-dark table-hover">
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>Title</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:unless="${lessons.empty}" th:each="lesson : ${lessons}">
+                        <td th:text="${lesson.id}">1</td>
+                        <td>
+                            <a th:text="${lesson.title}" th:href="@{/lesson/{id}(id = ${lesson.id})}">Lesson title</a>
+                        </td>
+                        <td>
+                            <form th:method="delete" th:action="@{/lesson/{id}(id = ${lesson.id})}">
+                                <button type="submit" class="btn btn-outline-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${lessons.empty}" >
+                        <td colspan="4">No data</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </form>
+    </div>
+
 </div>
 
 </body>

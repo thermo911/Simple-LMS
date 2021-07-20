@@ -3,6 +3,7 @@ package com.blazhkov.demo.controller;
 import com.blazhkov.demo.domain.Course;
 import com.blazhkov.demo.exception.NotFoundException;
 import com.blazhkov.demo.service.CourseService;
+import com.blazhkov.demo.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -18,10 +19,12 @@ import javax.validation.Valid;
 public class CourseController {
 
     private final CourseService courseService;
+    private final LessonService lessonService;
 
     @Autowired
-    public CourseController(CourseService courseService) {
+    public CourseController(CourseService courseService, LessonService lessonService) {
         this.courseService = courseService;
+        this.lessonService = lessonService;
     }
 
     /* Mappings */
@@ -30,7 +33,6 @@ public class CourseController {
     public String courseTable(Model model,
                               @RequestParam(name = "titlePrefix", required = false)
                               String titlePrefix) {
-
         if (titlePrefix == null) titlePrefix = "";
 
         model.addAttribute("courses", courseService.coursesByTitleWithPrefix(titlePrefix + "%"));
@@ -41,9 +43,12 @@ public class CourseController {
 
     @RequestMapping("/{id}")
     public String courseForm(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("course", courseService.courseById(id)
-                .orElseThrow(NotFoundException::new));
+        Course course = courseService.courseById(id).orElseThrow(NotFoundException::new);
+
+        model.addAttribute("course", course);
         model.addAttribute("activePage", "none");
+        model.addAttribute("lessons", lessonService.lessonsByCourse(course));
+
         return "course_form";
     }
 
@@ -52,6 +57,7 @@ public class CourseController {
         if (bindingResult.hasErrors()) {
             return "course_form";
         }
+
         courseService.saveCourse(course);
         return "redirect:/course";
     }
