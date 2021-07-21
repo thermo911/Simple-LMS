@@ -23,19 +23,20 @@ public class LessonController {
 
     @RequestMapping("/new")
     public String lessonForm(Model model, @RequestParam("course_id") long courseId) {
-        //model.addAttribute("courseId", courseId);
-        model.addAttribute("lesson", new LessonDTO(courseId));
+        model.addAttribute("lessonDTO", new LessonDTO(courseId));
         return "lesson_form";
     }
 
     @PostMapping
-    public String submitLessonForm(@Valid LessonDTO lessonDto, BindingResult bindingResult) {
+    public String submitLessonForm(@Valid LessonDTO lessonDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "lesson_form";
         }
-        lessonService.saveLesson(lessonDto);
-        return String.format("redirect:/course/%d", lessonDto.getCourseId());
+        lessonService.saveLesson(lessonDTO);
+        return String.format("redirect:/course/%d", lessonDTO.getCourseId());
     }
+
+
 
     @DeleteMapping("/{id}")
     public String deleteLesson(@PathVariable(name = "id") Long id) {
