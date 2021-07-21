@@ -13,10 +13,11 @@
 </head>
 
 <body>
-<div class="contrainer"><div class="row">
-    <header th:replace="fragments/header :: header"></header>
-    <div class="display-1">Edit course</div>
-</div>
+<div class="contrainer">
+    <div class="row">
+        <header th:replace="fragments/header :: header"></header>
+        <div class="display-1">Edit course</div>
+    </div>
 
 
     <div class="row">
@@ -44,12 +45,11 @@
 
 
         <div class="col-sm">
-            <div th:unless="${lessons == null}">
+            <div th:unless="${lessonDTOs == null}">
                 <div>
                     <a role="button" class="btn btn-outline-success" th:href="@{/lesson/new(course_id = ${course.id})}">New lesson</a>
                 </div>
 
-                <!-- Здесь должна быть таблица с уроками, которые входят в данный курс -->
                 <table class="table table-dark table-hover">
                     <thead>
                     <tr>
@@ -59,7 +59,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:unless="${lessons.empty}" th:each="lesson : ${lessons}">
+                    <tr th:unless="${lessonDTOs.empty}" th:each="lesson : ${lessonDTOs}">
                         <td th:text="${lesson.id}">1</td>
                         <td>
                             <a th:text="${lesson.title}" th:href="@{/lesson/{id}(id = ${lesson.id})}">Lesson title</a>
@@ -70,7 +70,7 @@
                             </form>
                         </td>
                     </tr>
-                    <tr th:if="${lessons.empty}">
+                    <tr th:if="${lessonDTOs.empty}">
                         <td colspan="4">No data</td>
                     </tr>
                     </tbody>

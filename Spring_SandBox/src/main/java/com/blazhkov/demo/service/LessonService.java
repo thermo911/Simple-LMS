@@ -30,12 +30,12 @@ public class LessonService {
         return lessonRepository.findByCourse(course);
     }
 
-    public void saveLesson(LessonDTO lessonDto) {
-        Course course = courseRepository.getById(lessonDto.getCourseId());
+    public void saveLesson(LessonDTO lessonDTO) {
+        Course course = courseRepository.getById(lessonDTO.getCourseId());
         Lesson lesson = new Lesson(
-                lessonDto.getId(),
-                lessonDto.getTitle(),
-                lessonDto.getText(),
+                lessonDTO.getId(),
+                lessonDTO.getTitle(),
+                lessonDTO.getText(),
                 course
         );
         lessonRepository.save(lesson);

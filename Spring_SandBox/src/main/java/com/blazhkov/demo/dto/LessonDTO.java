@@ -1,13 +1,14 @@
 package com.blazhkov.demo.dto;
 
+import com.blazhkov.demo.domain.Lesson;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 @Getter
+@Setter
 public class LessonDTO {
 
     @ToString.Exclude
@@ -28,4 +29,10 @@ public class LessonDTO {
         this.courseId = courseId;
     }
 
+    public LessonDTO(Lesson lesson) {
+        id = lesson.getId();
+        title = lesson.getTitle();
+        text = lesson.getText();
+        courseId = lesson.getCourse().getId();
+    }
 }

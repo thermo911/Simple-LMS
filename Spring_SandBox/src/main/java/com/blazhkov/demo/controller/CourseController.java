@@ -1,6 +1,7 @@
 package com.blazhkov.demo.controller;
 
 import com.blazhkov.demo.domain.Course;
+import com.blazhkov.demo.dto.LessonDTO;
 import com.blazhkov.demo.exception.NotFoundException;
 import com.blazhkov.demo.service.CourseService;
 import com.blazhkov.demo.service.LessonService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/course")
@@ -38,7 +40,7 @@ public class CourseController {
         model.addAttribute("courses", courseService.coursesByTitleWithPrefix(titlePrefix + "%"));
         model.addAttribute("activePage", "courses");
 
-        return "course_table";
+        return "courses";
     }
 
     @RequestMapping("/{id}")
@@ -47,15 +49,18 @@ public class CourseController {
 
         model.addAttribute("course", course);
         model.addAttribute("activePage", "none");
-        model.addAttribute("lessons", lessonService.lessonsByCourse(course));
+        model.addAttribute("lessonDTOs",
+                course.getLessons().stream().map(LessonDTO::new)
+                .collect(Collectors.toList())
+        );
 
-        return "course_form";
+        return "edit_course";
     }
 
     @PostMapping
     public String submitCourseForm(@Valid Course course, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "course_form";
+            return "edit_course";
         }
 
         courseService.saveCourse(course);
@@ -66,7 +71,7 @@ public class CourseController {
     public String courseForm(Model model) {
         model.addAttribute("course", new Course());
         model.addAttribute("activeRage", "none");
-        return "course_form";
+        return "edit_course";
     }
 
     @DeleteMapping("/{id}")
