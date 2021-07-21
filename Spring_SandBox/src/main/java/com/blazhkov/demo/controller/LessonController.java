@@ -23,8 +23,7 @@ public class LessonController {
 
     @RequestMapping("/new")
     public String lessonForm(Model model, @RequestParam("course_id") long courseId) {
-
-        model.addAttribute("courseId", courseId);
+        //model.addAttribute("courseId", courseId);
         model.addAttribute("lesson", new LessonDTO(courseId));
         return "lesson_form";
     }
@@ -44,6 +43,4 @@ public class LessonController {
         lessonService.removeLesson(id);
         return String.format("redirect:/course/%d", courseId);
     }
-
-
 }
