@@ -1,14 +1,15 @@
 package com.blazhkov.demo.controller;
 
 import com.blazhkov.demo.domain.User;
+import com.blazhkov.demo.exception.NotFoundException;
 import com.blazhkov.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
@@ -29,6 +30,13 @@ public class UserController {
         return "users";
     }
 
+    @RequestMapping("/{id}")
+    public String userForm(Model model, @PathVariable(name = "id") Long id) {
+        User user = userService.userById(id).orElseThrow(NotFoundException::new);
+        model.addAttribute("user", user);
+        return "edit_user";
+    }
+
     @RequestMapping("/new")
     public String userForm(Model model) {
         model.addAttribute("user", new User());
@@ -43,5 +51,13 @@ public class UserController {
         userService.saveUser(user);
         return "redirect:/user";
     }
+
+    @ExceptionHandler
+    public ModelAndView notFoundExceptionHandler(NotFoundException e) {
+        ModelAndView modelAndView = new ModelAndView("user_not_found");
+        modelAndView.setStatus(HttpStatus.NOT_FOUND);
+        return modelAndView;
+    }
+
 
  }
