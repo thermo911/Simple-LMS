@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Users</title>
+    <!-- Обязательные метатеги -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+<div class="container">
+    <header th:replace="fragments/header :: header"></header>
+    <h1 class="display-1">Users</h1>
+    <div class="row">
+        <form th:action="@{/user/new}">
+            <button type="submit" class="btn btn-outline-success">New user</button>
+        </form>
+    </div>
+<!--    <div class="row">-->
+<!--        <form>-->
+<!--            <label for="username" class="inline">Filter by title</label>-->
+<!--            <input type="text" id="usernamePrefix" class="inline" name="titlePrefix"-->
+<!--                   th:value="${param.titlePrefix}"/>-->
+<!--            <button class="btn btn-success">Apply</button>-->
+<!--        </form>-->
+<!--    </div>-->
+    <table class="table table-dark table-hover">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:unless="${users.empty}" th:each="user : ${users}">
+            <td th:text="${user.id}">1</td>
+            <td>
+                <a th:text="${user.username}" th:href="@{/user/{id}(id = ${user.id})}">User name</a>
+            </td>
+            <td th:text="${course.author}">Course author</td>
+        </tr>
+        <tr th:if="${users.empty}" >
+            <td colspan="4">No data</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

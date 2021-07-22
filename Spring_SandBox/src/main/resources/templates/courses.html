@@ -46,9 +46,19 @@
                         </td>
                         <td th:text="${course.author}">Course author</td>
                         <td>
-                            <form th:method="delete" th:action="@{/course/{id}(id = ${course.id})}">
-                                <button type="submit" class="btn btn-outline-danger">Delete</button>
-                            </form>
+                            <div class="row">
+                                <div class="col-lg">
+                                    <form th:method="delete" th:action="@{/course/{id}(id = ${course.id})}">
+                                        <button type="submit" class="btn btn-outline-danger">Delete</button>
+                                    </form>
+                                </div>
+                                <div class="col-lg">
+                                    <form th:method="get" th:action="@{/course/{id}/assign(id = ${course.id})}">
+                                        <button type="submit" class="btn btn-outline-success">Assign</button>
+                                    </form>
+                                </div>
+                            </div>
+
                         </td>
                     </tr>
                     <tr th:if="${courses.empty}" >
