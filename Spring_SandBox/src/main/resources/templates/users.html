@@ -42,10 +42,9 @@
             <td>
                 <a th:text="${user.username}" th:href="@{/user/{id}(id = ${user.id})}">User name</a>
             </td>
-            <td th:text="${course.author}">Course author</td>
         </tr>
         <tr th:if="${users.empty}" >
-            <td colspan="4">No data</td>
+            <td colspan="2">No data</td>
         </tr>
         </tbody>
     </table>
