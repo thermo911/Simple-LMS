@@ -2,6 +2,7 @@ package com.blazhkov.demo.controller;
 
 import com.blazhkov.demo.domain.User;
 import com.blazhkov.demo.exception.NotFoundException;
+import com.blazhkov.demo.exception.UserNotFoundException;
 import com.blazhkov.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class UserController {
 
     @RequestMapping("/{id}")
     public String userForm(Model model, @PathVariable(name = "id") Long id) {
-        User user = userService.userById(id).orElseThrow(NotFoundException::new);
+        User user = userService.userById(id).orElseThrow(UserNotFoundException::new);
         model.addAttribute("user", user);
         return "edit_user";
     }
@@ -59,7 +60,7 @@ public class UserController {
     }
 
     @ExceptionHandler
-    public ModelAndView notFoundExceptionHandler(NotFoundException e) {
+    public ModelAndView notFoundExceptionHandler(UserNotFoundException e) {
         ModelAndView modelAndView = new ModelAndView("user_not_found");
         modelAndView.setStatus(HttpStatus.NOT_FOUND);
         return modelAndView;

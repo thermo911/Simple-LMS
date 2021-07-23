@@ -2,6 +2,7 @@ package com.blazhkov.demo.controller;
 
 import com.blazhkov.demo.domain.Lesson;
 import com.blazhkov.demo.dto.LessonDTO;
+import com.blazhkov.demo.exception.LessonNotFoundException;
 import com.blazhkov.demo.exception.NotFoundException;
 import com.blazhkov.demo.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class LessonController {
 
     @RequestMapping("/{id}")
     public String lessonForm(Model model, @PathVariable(name = "id") Long id) {
-        Lesson lesson = lessonService.lessonById(id).orElseThrow(NotFoundException::new);
+        Lesson lesson = lessonService.lessonById(id).orElseThrow(LessonNotFoundException::new);
         LessonDTO lessonDTO = new LessonDTO(lesson);
         model.addAttribute("lessonDTO", lessonDTO);
         return "edit_lesson";
@@ -50,14 +51,14 @@ public class LessonController {
 
     @DeleteMapping("/{id}")
     public String deleteLesson(@PathVariable(name = "id") Long id) {
-        Lesson lesson = lessonService.lessonById(id).orElseThrow(NotFoundException::new);
+        Lesson lesson = lessonService.lessonById(id).orElseThrow(LessonNotFoundException::new);
         Long courseId = lesson.getCourse().getId();
         lessonService.removeLesson(id);
         return String.format("redirect:/course/%d", courseId);
     }
 
     @ExceptionHandler
-    public ModelAndView notFoundExceptionHandler(NotFoundException ex) {
+    public ModelAndView notFoundExceptionHandler(LessonNotFoundException ex) {
         ModelAndView modelAndView = new ModelAndView("lesson_not_found");
         modelAndView.setStatus(HttpStatus.NOT_FOUND);
         return modelAndView;

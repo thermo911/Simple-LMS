@@ -100,11 +100,10 @@
                             <a th:text="${user.username}" th:href="@{/user/{id}(id = ${user.id})}">User name</a>
                         </td>
                         <td>
-                            <button>Tap</button>
-<!--                            <form th:method="delete"-->
-<!--                                  th:action="@{/course/{id}(id = ${course.id})/expel(user_id = ${user.id}})}">-->
-<!--                                <button type="submit" class="btn btn-outline-danger">Expel</button>-->
-<!--                            </form>-->
+                            <form th:method="delete"
+                                  th:action="@{/course/{id}/remove(id = ${course.id}, userId = ${user.id})}">
+                                <button type="submit" class="btn btn-outline-danger">Remove</button>
+                            </form>
                         </td>
                     </tr>
                     <tr th:if="${users.empty}">

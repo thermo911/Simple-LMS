@@ -3,7 +3,9 @@ package com.blazhkov.demo.controller;
 import com.blazhkov.demo.domain.Course;
 import com.blazhkov.demo.domain.User;
 import com.blazhkov.demo.dto.LessonDTO;
+import com.blazhkov.demo.exception.CourseNotFoundException;
 import com.blazhkov.demo.exception.NotFoundException;
+import com.blazhkov.demo.exception.UserNotFoundException;
 import com.blazhkov.demo.service.CourseService;
 import com.blazhkov.demo.service.LessonService;
 import com.blazhkov.demo.service.UserService;
@@ -51,7 +53,7 @@ public class CourseController {
 
     @RequestMapping("/{id}")
     public String courseForm(Model model, @PathVariable("id") Long id) {
-        Course course = courseService.courseById(id).orElseThrow(NotFoundException::new);
+        Course course = courseService.courseById(id).orElseThrow(CourseNotFoundException::new);
 
         model.addAttribute("course", course);
         model.addAttribute("activePage", "none");
@@ -69,7 +71,6 @@ public class CourseController {
         if (bindingResult.hasErrors()) {
             return "edit_course";
         }
-        System.out.println("SHITTTTTTTTTTTTTTTTTTT: ");
         courseService.saveCourse(course);
         return "redirect:/course";
     }
@@ -96,11 +97,26 @@ public class CourseController {
 
     @PostMapping("/{id}/assign")
     public String submitAssignUserForm(@PathVariable(name="id") Long courseId,
-                             @RequestParam(name = "userId") Long userId) {
-        Course course = courseService.courseById(courseId).get();
-        User user = userService.userById(userId).get();
+                                       @RequestParam(name="userId") Long userId) {
+        Course course = courseService.courseById(courseId)
+                .orElseThrow(CourseNotFoundException::new);
+        User user = userService.userById(userId)
+                .orElseThrow(UserNotFoundException::new);
         course.getUsers().add(user);
         user.getCourses().add(course);
+        courseService.saveCourse(course);
+        return String.format("redirect:/course/%d", courseId);
+    }
+
+    @DeleteMapping("/{id}/remove")
+    public String removeUserFromCourse(@PathVariable(name="id") Long courseId,
+                                       @RequestParam(name="userId") Long userId) {
+        Course course = courseService.courseById(courseId)
+                .orElseThrow(CourseNotFoundException::new);
+        User user = userService.userById(userId)
+                .orElseThrow(UserNotFoundException::new);
+        user.getCourses().remove(course);
+        course.getUsers().remove(user);
         courseService.saveCourse(course);
         return String.format("redirect:/course/%d", courseId);
     }
@@ -108,8 +124,15 @@ public class CourseController {
     /* Exception handlers */
 
     @ExceptionHandler
-    public ModelAndView notFoundExceptionHandler(NotFoundException ex) {
+    public ModelAndView courseNotFoundExceptionHandler(CourseNotFoundException ex) {
         ModelAndView modelAndView = new ModelAndView("course_not_found");
+        modelAndView.setStatus(HttpStatus.NOT_FOUND);
+        return modelAndView;
+    }
+
+    @ExceptionHandler
+    public ModelAndView userNotFoundExceptionHandler(UserNotFoundException ex) {
+        ModelAndView modelAndView = new ModelAndView("user_not_found");
         modelAndView.setStatus(HttpStatus.NOT_FOUND);
         return modelAndView;
     }
