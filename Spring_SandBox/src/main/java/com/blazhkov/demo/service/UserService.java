@@ -32,4 +32,8 @@ public class UserService {
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
+
+    public List<User> usersNotAssignedToCourse(Long courseId) {
+        return userRepository.findUsersNotAssignedToCourse(courseId);
+    }
 }

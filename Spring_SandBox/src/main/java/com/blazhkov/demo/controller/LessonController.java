@@ -3,7 +3,6 @@ package com.blazhkov.demo.controller;
 import com.blazhkov.demo.domain.Lesson;
 import com.blazhkov.demo.dto.LessonDTO;
 import com.blazhkov.demo.exception.LessonNotFoundException;
-import com.blazhkov.demo.exception.NotFoundException;
 import com.blazhkov.demo.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

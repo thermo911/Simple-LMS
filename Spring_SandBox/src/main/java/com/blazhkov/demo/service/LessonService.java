@@ -13,8 +13,8 @@ import java.util.Optional;
 
 @Service
 public class LessonService {
-    private LessonRepository lessonRepository;
-    private CourseRepository courseRepository;
+    private final LessonRepository lessonRepository;
+    private final CourseRepository courseRepository;
 
     @Autowired
     private LessonService(LessonRepository lessonRepository, CourseRepository courseRepository) {

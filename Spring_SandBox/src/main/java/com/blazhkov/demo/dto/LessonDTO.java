@@ -35,4 +35,11 @@ public class LessonDTO {
         text = lesson.getText();
         courseId = lesson.getCourse().getId();
     }
+
+    // without text !
+    public LessonDTO(Long id, String title, Long courseId) {
+        this.id = id;
+        this.title = title;
+        this.courseId = courseId;
+    }
 }

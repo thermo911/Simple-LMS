@@ -4,7 +4,6 @@ import com.blazhkov.demo.domain.Course;
 import com.blazhkov.demo.domain.User;
 import com.blazhkov.demo.dto.LessonDTO;
 import com.blazhkov.demo.exception.CourseNotFoundException;
-import com.blazhkov.demo.exception.NotFoundException;
 import com.blazhkov.demo.exception.UserNotFoundException;
 import com.blazhkov.demo.service.CourseService;
 import com.blazhkov.demo.service.LessonService;
@@ -91,7 +90,7 @@ public class CourseController {
     @GetMapping("/{id}/assign")
     public String assignUserForm(Model model, @PathVariable("id") Long id) {
         model.addAttribute("courseId", id);
-        model.addAttribute("users", userService.allUsers());
+        model.addAttribute("users", userService.usersNotAssignedToCourse(id));
         return "assign_user";
     }
 

@@ -15,20 +15,26 @@
 <body>
 <div class="display-1">Assign user to course</div>
 
-<form th:method="post" th:action="@{/course/{courseId}/assign(courseId = ${courseId})}">
+<div th:unless="${users.empty}">
+    <form th:method="post" th:action="@{/course/{courseId}/assign(courseId = ${courseId})}">
 
-    <div class="form-group">
-        <label for="userId">User to assign</label>
-        <select id="userId" name="userId" class="form-control">
-            <option th:each="user : ${users}"
-                    th:value="${user.id}"
-                    th:text="${user.username}">Username</option>
-        </select>
-    </div>
+        <div class="form-group">
+            <label for="userId">User to assign</label>
+            <select id="userId" name="userId" class="form-control">
+                <option th:each="user : ${users}"
+                        th:value="${user.id}"
+                        th:text="${user.username}">Username</option>
+            </select>
+        </div>
 
-    <div>
-        <button type="submit" class="btn btn-success">Submit</button>
-    </div>
-</form>
+        <div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+    </form>
+</div>
+<div th:if="${users.empty}" class="alert alert-success">
+    All existing users already assigned!
+</div>
+
 </body>
 </html>
