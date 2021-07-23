@@ -1,4 +1,4 @@
 package com.blazhkov.demo.exception;
 
-public class NotFoundException extends RuntimeException {
+public abstract class NotFoundException extends RuntimeException {
 }
