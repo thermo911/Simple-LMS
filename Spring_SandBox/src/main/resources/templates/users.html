@@ -34,6 +34,7 @@
         <tr>
             <th>id</th>
             <th>Name</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -42,9 +43,14 @@
             <td>
                 <a th:text="${user.username}" th:href="@{/user/{id}(id = ${user.id})}">User name</a>
             </td>
+            <td>
+                <form th:method="delete" th:action="@{/user/{id}(id = ${user.id})}">
+                    <button class="btn btn-outline-danger" type="submit">Delete</button>
+                </form>
+            </td>
         </tr>
         <tr th:if="${users.empty}" >
-            <td colspan="2">No data</td>
+            <td colspan="3">No data</td>
         </tr>
         </tbody>
     </table>

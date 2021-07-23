@@ -52,6 +52,12 @@ public class UserController {
         return "redirect:/user";
     }
 
+    @DeleteMapping("/{id}")
+    public String deleteUser(@PathVariable(name = "id") Long id) {
+        userService.deleteUserById(id);
+        return "redirect:/user";
+    }
+
     @ExceptionHandler
     public ModelAndView notFoundExceptionHandler(NotFoundException e) {
         ModelAndView modelAndView = new ModelAndView("user_not_found");
