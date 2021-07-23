@@ -1,10 +1,12 @@
 package com.blazhkov.demo.controller;
 
 import com.blazhkov.demo.domain.Course;
+import com.blazhkov.demo.domain.User;
 import com.blazhkov.demo.dto.LessonDTO;
 import com.blazhkov.demo.exception.NotFoundException;
 import com.blazhkov.demo.service.CourseService;
 import com.blazhkov.demo.service.LessonService;
+import com.blazhkov.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -22,11 +24,15 @@ public class CourseController {
 
     private final CourseService courseService;
     private final LessonService lessonService;
+    private final UserService userService;
 
     @Autowired
-    public CourseController(CourseService courseService, LessonService lessonService) {
+    public CourseController(CourseService courseService,
+                            LessonService lessonService,
+                            UserService userService) {
         this.courseService = courseService;
         this.lessonService = lessonService;
+        this.userService = userService;
     }
 
     /* Mappings */
@@ -53,6 +59,7 @@ public class CourseController {
                 course.getLessons().stream().map(LessonDTO::new)
                 .collect(Collectors.toList())
         );
+        model.addAttribute("users", course.getUsers());
 
         return "edit_course";
     }
@@ -62,7 +69,7 @@ public class CourseController {
         if (bindingResult.hasErrors()) {
             return "edit_course";
         }
-
+        System.out.println("SHITTTTTTTTTTTTTTTTTTT: ");
         courseService.saveCourse(course);
         return "redirect:/course";
     }
@@ -78,6 +85,24 @@ public class CourseController {
     public String deleteCourse(@PathVariable("id") Long id) {
         courseService.removeCourse(id);
         return "redirect:/course";
+    }
+
+    @GetMapping("/{id}/assign")
+    public String assignUserForm(Model model, @PathVariable("id") Long id) {
+        model.addAttribute("courseId", id);
+        model.addAttribute("users", userService.allUsers());
+        return "assign_user";
+    }
+
+    @PostMapping("/{id}/assign")
+    public String submitAssignUserForm(@PathVariable(name="id") Long courseId,
+                             @RequestParam(name = "userId") Long userId) {
+        Course course = courseService.courseById(courseId).get();
+        User user = userService.userById(userId).get();
+        course.getUsers().add(user);
+        user.getCourses().add(course);
+        courseService.saveCourse(course);
+        return String.format("redirect:/course/%d", courseId);
     }
 
     /* Exception handlers */
