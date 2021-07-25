@@ -16,5 +16,5 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     @Query("select new com.blazhkov.demo.dto.LessonDTO(l.id, l.title, l.course.id) " +
             "from Lesson l where l.course.id = :id")
-    List<LessonDTO> findAllForLessonIdWithoutText(@Param("id") long id);
+    List<LessonDTO> findLessonsForCourseIdNoText(@Param("id") long id);
 }

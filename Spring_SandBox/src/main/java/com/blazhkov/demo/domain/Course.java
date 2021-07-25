@@ -8,16 +8,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-@NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@NoArgsConstructor
 @Setter
+@Getter
 @Entity
 @Table(name = "courses")
 public class Course {
-
-    @ToString.Exclude          // lombok
-    @EqualsAndHashCode.Exclude // lombok
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
