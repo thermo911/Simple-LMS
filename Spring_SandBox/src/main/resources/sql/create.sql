@@ -3,11 +3,6 @@ CREATE TABLE IF NOT EXISTS categories (
 	title VARCHAR(30)
 );
 
-CREATE TABLE IF NOT EXISTS ratings (
-	id    INTEGER PRIMARY KEY,
-	score INTEGER
-);
-
 CREATE TABLE IF NOT EXISTS users (
 	id            INTEGER PRIMARY KEY,
 	nickname      VARCHAR(30) UNIQUE,
@@ -31,7 +26,6 @@ CREATE TABLE IF NOT EXISTS courses (
 	id          INTEGER PRIMARY KEY,
 	title       VARCHAR(30),
 	description TEXT,
-	rating      INTEGER,
 	category    INTEGER,
 	hours       INTEGER,
 	created_by  INTEGER,
@@ -45,7 +39,6 @@ CREATE TABLE IF NOT EXISTS courses (
 	FOREIGN KEY (created_by) REFERENCES users      (id),
 	FOREIGN KEY (updated_by) REFERENCES users      (id),
 	FOREIGN KEY (deleted_by) REFERENCES users      (id),
-	FOREIGN KEY (rating)     REFERENCES ratings    (id),
 	FOREIGN KEY (category)   REFERENCES categories (id)
 );
 
@@ -83,24 +76,24 @@ CREATE TABLE IF NOT EXISTS topics (
 	FOREIGN KEY (updated_by) REFERENCES users   (id),
 	FOREIGN KEY (deleted_by) REFERENCES users   (id),
 	FOREIGN KEY (module_id)  REFERENCES modules (id)
-)
+);
 
 CREATE TABLE IF NOT EXISTS tasks (
-	id INTEGER PRIMARY KEY,
-	topic_id INTEGER
+	id          INTEGER PRIMARY KEY,
+	topic_id    INTEGER,
 	title       VARCHAR(30),
 	description TEXT,
 	
 	FOREIGN KEY (topic_id) REFERENCES topics (id)
-)
+);
 
 CREATE TABLE IF NOT EXISTS contents ( 
 	id       INTEGER PRIMARY KEY,
 	topic_id INTEGER,
 	kind     VARCHAR(20),
-	content  BLOB;
+	content  BLOB,
 	
-	FOREIGN KEY (topic_id) REFERENCES topics (id);
+	FOREIGN KEY (topic_id) REFERENCES topics (id)
 );
 
 
@@ -109,15 +102,17 @@ CREATE TABLE IF NOT EXISTS users_courses (
 	course_id INTEGER,
 	
 	FOREIGN KEY (user_id)   REFERENCES users   (id) ON DELETE CASCADE,
-	FOREIGN KEY (course_id) REFERENCES courses (id) ON DELETE CASCADE;
+	FOREIGN KEY (course_id) REFERENCES courses (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS users_ratings (
-	user_id   INTEGER,
-	rating_id INTEGER,
+CREATE TABLE IF NOT EXISTS ratings (
+	id        INTEGER PRIMARY KEY,
+	course_id INTEGER,
+	author_id INTEGER,
+	score     INTEGER,
 	
-	FOREIGN KEY (user_id)   REFERENCES users   (id) ON DELETE CASCADE,
-	FOREIGN KEY (rating_id) REFERENCES ratings (id) ON DELETE CASCADE;
+	FOREIGN KEY (course_id) REFERENCES courses (id),
+	FOREIGN KEY (author_id) REFERENCES users   (id)
 );
 
 
