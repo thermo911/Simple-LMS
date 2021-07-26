@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -13,26 +12,18 @@ import java.util.Set;
 @Setter
 @Getter
 @Entity
-@Table(name = "courses")
-public class Course {
-
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Course author have to be filled")
     @Column
-    private String author;
+    @NotBlank(message = "Name has to be filled")
+    private String username;
 
-    @NotBlank(message = "Course title have to be filled")
-    @Column
-    private String title;
-
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<Lesson> lessons;
-
-    @ManyToMany
-    private Set<User> users;
+    @ManyToMany(mappedBy = "users")
+    private Set<Course> courses;
 
     @Override
     public int hashCode() {
@@ -43,7 +34,7 @@ public class Course {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        Course course = (Course) obj;
-        return this.id.equals(course.id);
+        User user = (User) obj;
+        return this.id.equals(user.id);
     }
 }
