@@ -19,7 +19,7 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/lesson")
 public class LessonController {
-    private LessonService lessonService;
+    private final LessonService lessonService;
 
     @Autowired
     public LessonController(LessonService lessonService) {
@@ -27,8 +27,8 @@ public class LessonController {
     }
 
     @Secured("ROLE_ADMIN")
-    @RequestMapping("/new")
-    public String lessonForm(Model model, @RequestParam("course_id") long courseId) {
+    @GetMapping("/new")
+    public String newLessonForm(Model model, @RequestParam("course_id") Long courseId) {
         model.addAttribute("lessonDTO", new LessonDTO(courseId));
         return "edit_lesson";
     }
@@ -44,7 +44,7 @@ public class LessonController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     public String lessonForm(Model model, @PathVariable(name = "id") Long id) {
         Lesson lesson = lessonService.lessonById(id).orElseThrow(LessonNotFoundException::new);
         LessonDTO lessonDTO = new LessonDTO(lesson);
