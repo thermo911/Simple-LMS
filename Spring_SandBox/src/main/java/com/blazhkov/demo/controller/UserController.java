@@ -92,6 +92,4 @@ public class UserController {
         modelAndView.setStatus(HttpStatus.NOT_FOUND);
         return modelAndView;
     }
-
-
  }

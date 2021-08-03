@@ -1,8 +1,9 @@
-package com.blazhkov.demo.service;
+package com.blazhkov.demo.service.impl;
 
 import com.blazhkov.demo.dao.UserRepository;
 import com.blazhkov.demo.domain.User;
 import com.blazhkov.demo.dto.UserDTO;
+import com.blazhkov.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,17 +13,18 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Override
     public List<UserDTO> allUsers() {
 
         return userRepository.findAll().stream()
@@ -36,7 +38,7 @@ public class UserService {
                 ).collect(Collectors.toList());
     }
 
-    // usually password is already encoded if object of user was not in View layer
+    @Override
     public void saveUser(UserDTO userDTO, boolean passwordEncoded) {
         String password = userDTO.getPassword();
         if (!passwordEncoded)
@@ -50,7 +52,7 @@ public class UserService {
                 userDTO.getRoles()));
     }
 
-    // note: if password is required method is supposed to return UserDTO with ENCODED password
+    @Override
     public Optional<UserDTO> userById(Long id, boolean passwordRequired) {
         return userRepository.findById(id).map(
                 user -> UserDTO.builder()
@@ -63,10 +65,12 @@ public class UserService {
         );
     }
 
+    @Override
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
 
+    @Override
     public List<UserDTO> usersNotAssignedToCourse(Long courseId) {
         return userRepository.findUsersNotAssignedToCourse(courseId).stream()
                 .map(user -> UserDTO.builder()
@@ -79,6 +83,7 @@ public class UserService {
                 ).collect(Collectors.toList());
     }
 
+    @Override
     public Optional<User> userByUsername(String username) {
         return userRepository.findByUsername(username);
     }

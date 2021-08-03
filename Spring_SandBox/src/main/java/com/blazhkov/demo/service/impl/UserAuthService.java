@@ -1,4 +1,4 @@
-package com.blazhkov.demo.service;
+package com.blazhkov.demo.service.impl;
 
 import com.blazhkov.demo.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
