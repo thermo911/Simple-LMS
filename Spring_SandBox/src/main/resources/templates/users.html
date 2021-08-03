@@ -17,18 +17,11 @@
     <header th:replace="fragments/header :: header"></header>
     <h1 class="display-1">Users</h1>
     <div class="row">
-        <form th:action="@{/user/new}">
+        <form th:action="@{/admin/user/new}">
             <button type="submit" class="btn btn-outline-success">New user</button>
         </form>
     </div>
-<!--    <div class="row">-->
-<!--        <form>-->
-<!--            <label for="username" class="inline">Filter by title</label>-->
-<!--            <input type="text" id="usernamePrefix" class="inline" name="titlePrefix"-->
-<!--                   th:value="${param.titlePrefix}"/>-->
-<!--            <button class="btn btn-success">Apply</button>-->
-<!--        </form>-->
-<!--    </div>-->
+
     <table class="table table-dark table-hover">
         <thead>
         <tr>
@@ -41,10 +34,10 @@
         <tr th:unless="${users.empty}" th:each="user : ${users}">
             <td th:text="${user.id}">1</td>
             <td>
-                <a th:text="${user.username}" th:href="@{/user/{id}(id = ${user.id})}">User name</a>
+                <a th:text="${user.username}" th:href="@{/admin/user/{id}(id = ${user.id})}">User name</a>
             </td>
             <td>
-                <form th:method="delete" th:action="@{/user/{id}(id = ${user.id})}">
+                <form th:method="delete" th:action="@{/admin/user/{id}(id = ${user.id})}">
                     <button class="btn btn-outline-danger" type="submit">Delete</button>
                 </form>
             </td>

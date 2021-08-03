@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <title>Courses</title>
         <!-- Обязательные метатеги -->
@@ -47,7 +48,7 @@
                         <td th:text="${course.author}">Course author</td>
                         <td>
                             <div class="row">
-                                <div class="col-lg">
+                                <div class="col-lg" sec:authorize="hasRole('ADMIN')">
                                     <form th:method="delete" th:action="@{/course/{id}(id = ${course.id})}">
                                         <button type="submit" class="btn btn-outline-danger">Delete</button>
                                     </form>
