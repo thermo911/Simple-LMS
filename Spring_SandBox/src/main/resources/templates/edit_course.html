@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <title>Edit course</title>
@@ -36,7 +37,7 @@
                 <small class="text-danger" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">Course author has to be filled</small>
             </div>
 
-            <div>
+            <div sec:authorize="hasRole('ADMIN')">
                 <button type="submit" class="btn btn-success">Submit</button>
             </div>
         </form>
@@ -48,7 +49,8 @@
 
         <div class="col-lg">
             <div th:unless="${lessonDTOs == null}">
-                <a role="button" class="btn btn-outline-success"
+                <a sec:authorize="hasRole('ADMIN')"
+                   role="button" class="btn btn-outline-success"
                    th:href="@{/lesson/new(course_id = ${course.id})}">New lesson</a>
 
                 <table class="table table-dark table-hover">
@@ -56,7 +58,7 @@
                     <tr>
                         <th>id</th>
                         <th>Title</th>
-                        <th>Action</th>
+                        <th sec:authorize="hasRole('ADMIN')">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -65,8 +67,8 @@
                         <td>
                             <a th:text="${lesson.title}" th:href="@{/lesson/{id}(id = ${lesson.id})}">Lesson title</a>
                         </td>
-                        <td>
-                            <form th:method="delete" th:action="@{/lesson/{id}(id = ${lesson.id})}">
+                        <td sec:authorize="hasRole('ADMIN')">
+                            <form  th:method="delete" th:action="@{/lesson/{id}(id = ${lesson.id})}">
                                 <button type="submit" class="btn btn-outline-danger">Delete</button>
                             </form>
                         </td>
@@ -82,7 +84,8 @@
 <!--        TABLE WITH USERS-->
         <div class="col-lg">
             <div th:unless="${users == null}">
-                <form th:method="get" th:action="@{/course/{id}/assign(id = ${course.id})}">
+                <form sec:authorize="hasRole('ADMIN')"
+                      th:method="get" th:action="@{/course/{id}/assign(id = ${course.id})}">
                     <button type="submit" class="btn btn-outline-success">Assign</button>
                 </form>
                 <table class="table table-dark table-hover">
@@ -97,7 +100,7 @@
                     <tr th:unless="${users.empty}" th:each="user : ${users}">
                         <td th:text="${user.id}">1</td>
                         <td>
-                            <a th:text="${user.username}" th:href="@{/user/{id}(id = ${user.id})}">User name</a>
+                            <a th:text="${user.username}" th:href="@{/admin/user/{id}(id = ${user.id})}">User name</a>
                         </td>
                         <td>
                             <form th:method="delete"

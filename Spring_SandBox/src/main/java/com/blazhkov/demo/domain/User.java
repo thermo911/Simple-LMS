@@ -1,5 +1,6 @@
 package com.blazhkov.demo.domain;
 
+import com.blazhkov.demo.dto.UserDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,11 +20,16 @@ public class User {
     private Long id;
 
     @Column
-    @NotBlank(message = "Name has to be filled")
     private String username;
+
+    @Column
+    private String password;
 
     @ManyToMany(mappedBy = "users")
     private Set<Course> courses;
+
+    @ManyToMany
+    private Set<Role> roles;
 
     @Override
     public int hashCode() {
@@ -36,5 +42,15 @@ public class User {
         if (obj == null || getClass() != obj.getClass()) return false;
         User user = (User) obj;
         return this.id.equals(user.id);
+    }
+
+    public static User fromDTO(UserDTO dto) {
+        User user = new User();
+        user.id = dto.getId();
+        user.username = dto.getUsername();
+        user.password = dto.getPassword();
+        user.courses = dto.getCourses();
+        user.roles = dto.getRoles();
+        return user;
     }
 }
