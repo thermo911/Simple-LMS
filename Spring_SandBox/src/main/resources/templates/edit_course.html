@@ -49,6 +49,7 @@
 
         <div class="col-lg">
             <div th:unless="${lessonDTOs == null}">
+
                 <a sec:authorize="hasRole('ADMIN')"
                    role="button" class="btn btn-outline-success"
                    th:href="@{/lesson/new(course_id = ${course.id})}">New lesson</a>
