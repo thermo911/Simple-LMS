@@ -7,65 +7,112 @@ import com.blazhkov.demo.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DataJpaTest
 public class UserServiceImplTests {
 
+    @Autowired
     private UserRepository userRepository;
+    @MockBean
     private PasswordEncoder passwordEncoder;
+    @Autowired
     private UserServiceImpl userService;
+
+    @TestConfiguration
+    static class TestConfig {
+        @Bean
+        public UserServiceImpl UserServiceImpl(UserRepository userRepository,
+                                               PasswordEncoder passwordEncoder) {
+            return new UserServiceImpl(userRepository, passwordEncoder);
+        }
+    }
 
     @BeforeAll
     void setup() {
-        userRepository = mock(UserRepository.class);
-        passwordEncoder = mock(PasswordEncoder.class);
-        userService = new UserServiceImpl(userRepository, passwordEncoder);
+        userRepository.saveAll(List.of(
+                new User(1L, "Alex", "root", null, null),
+                new User(2L, "Dima", "pass", null, null),
+                new User(3L, "Jane", "cute", null, null)
+        ));
     }
 
     @Test
-    void allUsersTest() {
-        when(userRepository.findAll()).thenReturn(new LinkedList<>());
-
-        // Quite significant test!
-        assertEquals(new LinkedList<UserDTO>(), userService.allUsers());
+    void ullUsersTest() {
+        List<UserDTO> list = userService.allUsers();
+        assertEquals(3, list.size());
     }
 
     @Test
     void userByIdTest() {
-        User user = new User(1L, "Alex", "defender", null, null);
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(userRepository.findById(2L)).thenReturn(Optional.empty());
+        Optional<UserDTO> user = userService.userById(1L, true);
+        assertTrue(user.isPresent());
+        assertEquals("root", user.get().getPassword());
 
-        Optional<UserDTO> temp = userService.userById(1L, false);
-        assertTrue(temp.isPresent());
-        assertEquals("Alex", temp.get().getUsername());
+        user = userService.userById(2L, false);
+        assertTrue(user.isPresent());
+        assertEquals("Dima", user.get().getUsername());
+        assertEquals("", user.get().getPassword());
 
-        temp = userService.userById(1L, true);
-        assertTrue(temp.isPresent());
-        assertEquals("defender", temp.get().getPassword());
-
-        temp = userService.userById(2L, false);
-        assertTrue(temp.isEmpty());
+        user = userService.userById(1000L, true);
+        assertTrue(user.isEmpty());
     }
 
     @Test
     void userByUsernameTest() {
-        User user = new User(1L, "Alex", "defender", null, null);
-        when(userRepository.findByUsername("Alex")).thenReturn(Optional.of(user));
-
-        Optional<User> temp = userService.userByUsername("Alex");
-        assertTrue(temp.isPresent());
-        assertEquals(1L, temp.get().getId());
+        Optional<User> user = userService.userByUsername("Jane");
+        assertTrue(user.isPresent());
+        assertEquals("cute", user.get().getPassword());
     }
 
+    @Test
+    void saveUserTest() {
+        when(passwordEncoder.encode(anyString())).thenReturn("ENCODED");
+
+        int totalUsers = userRepository.findAll().size();
+        userService.saveUser(
+                UserDTO.fromUser(
+                        new User(null, "Tom", "defender", null, null)
+                ), true);
+        assertEquals(totalUsers + 1, userRepository.findAll().size());
+
+        Optional<User> user = userService.userByUsername("Tom");
+        assertTrue(user.isPresent());
+        assertEquals("defender", user.get().getPassword());
+
+        userService.saveUser(UserDTO.fromUser(
+                new User(null, "Bob", "defender", null, null)
+        ), false);
+
+        user = userService.userByUsername("Bob");
+        assertTrue(user.isPresent());
+        assertEquals("ENCODED", user.get().getPassword());
+    }
+
+    @Test
+    void deleteUserByIdTest() {
+        Optional<UserDTO> user = userService.userById(1L, false);
+        assertTrue(user.isPresent());
+
+        userService.deleteUserById(1L);
+        user = userService.userById(1L, false);
+        assertTrue(user.isEmpty());
+    }
 
 }
