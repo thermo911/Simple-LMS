@@ -50,7 +50,7 @@ public class UserController {
     }
 
     @Secured("ROLE_ADMIN")
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     public String userForm(Model model, @PathVariable(name = "id") Long id) {
         UserDTO user = userService.userById(id, false).orElseThrow(UserNotFoundException::new);
         model.addAttribute("user", user);
@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @Secured("ROLE_ADMIN")
-    @RequestMapping("/new")
+    @GetMapping("/new")
     public String userForm(Model model) {
         model.addAttribute("user", new UserDTO());
         return "edit_user";
@@ -92,6 +92,4 @@ public class UserController {
         modelAndView.setStatus(HttpStatus.NOT_FOUND);
         return modelAndView;
     }
-
-
  }

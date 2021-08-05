@@ -59,7 +59,7 @@ public class CourseController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     public String courseForm(Model model, @PathVariable("id") Long id) {
         Course course = courseService.courseById(id).orElseThrow(CourseNotFoundException::new);
 
@@ -85,7 +85,7 @@ public class CourseController {
     }
 
     @Secured("ROLE_ADMIN")
-    @RequestMapping("/new")
+    @GetMapping("/new")
     public String courseForm(Model model) {
         model.addAttribute("course", new Course());
         model.addAttribute("activeRage", "none");

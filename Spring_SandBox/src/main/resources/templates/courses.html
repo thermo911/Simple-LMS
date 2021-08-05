@@ -18,7 +18,7 @@
             <header th:replace="fragments/header :: header"></header>
             <h1 class="display-1">Courses</h1>
             <div class="row">
-                <form th:action="@{/course/new}">
+                <form th:method="get" th:action="@{/course/new}">
                     <button type="submit" class="btn btn-outline-success">New course</button>
                 </form>
             </div>

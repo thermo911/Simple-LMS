@@ -3,3 +3,8 @@ body {
     color: cornsilk;
     background-color: black;
 }
+
+select, input, textarea {
+    background-color: #222222 !important;
+    color: cornsilk !important;
+}
