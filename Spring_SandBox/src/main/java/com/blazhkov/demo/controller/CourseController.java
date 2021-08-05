@@ -52,7 +52,7 @@ public class CourseController {
                               String titlePrefix, HttpSession session) {
         if (titlePrefix == null) titlePrefix = "";
 
-        model.addAttribute("courses", courseService.coursesByTitleWithPrefix(titlePrefix + "%"));
+        model.addAttribute("courses", courseService.coursesByTitleWithPrefix(titlePrefix));
         model.addAttribute("activePage", "courses");
 
         return "courses";
