@@ -49,8 +49,7 @@ public class UserControllerTests {
     }
 
     @Test
-    @WithMockUser(roles = "USER")
-    void userTableRoleUserTest() throws Exception {
+    void userTableTest() throws Exception {
 
         mockMvc.perform(get("/admin/user"))
                 .andExpect(status().is3xxRedirection())
