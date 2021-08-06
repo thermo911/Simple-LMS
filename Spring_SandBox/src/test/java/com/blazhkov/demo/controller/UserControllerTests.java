@@ -1,12 +1,10 @@
 package com.blazhkov.demo.controller;
 
 import com.blazhkov.demo.dao.RoleRepository;
-import com.blazhkov.demo.domain.Course;
 import com.blazhkov.demo.dto.UserDTO;
 import com.blazhkov.demo.exception.UserNotFoundException;
 import com.blazhkov.demo.service.CourseService;
 import com.blazhkov.demo.service.UserService;
-import org.hamcrest.Matcher;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,7 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
