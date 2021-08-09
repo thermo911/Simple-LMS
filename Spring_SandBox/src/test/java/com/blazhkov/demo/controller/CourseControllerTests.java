@@ -137,7 +137,7 @@ public class CourseControllerTests {
     @WithMockUser(roles = "USER", username = "Alex")
     void assignUserFormUserTest() throws Exception {
         when(userService.userByUsername("Alex")).thenReturn(Optional.of(
-                new User(1L, "Alex", null, null, null)
+                new User(1L, "Alex", null, null, null, null)
         ));
 
         mockMvc.perform(get("/course/{id}/assign", 1L)
@@ -166,7 +166,7 @@ public class CourseControllerTests {
                 new Course(1L, "Alex", null, null, new HashSet<>())
         ));
         when(userService.userById(anyLong(), anyBoolean())).thenReturn(Optional.of(
-                new UserDTO(1L, "John", null, new HashSet<>(), null)
+                new UserDTO(1L, "John", null, new HashSet<>(), null, null)
         ));
 
         doNothing().when(courseService).saveCourse(any());
@@ -191,7 +191,7 @@ public class CourseControllerTests {
                 new Course(1L, "Bob", null, null, new HashSet<>())
         ));
         when(userService.userById(anyLong(), anyBoolean())).thenReturn(Optional.of(
-                new UserDTO(1L, "John", null, new HashSet<>(), null)
+                new UserDTO(1L, "John", null, new HashSet<>(), null, null)
         ));
 
         doNothing().when(courseService).saveCourse(any());
@@ -216,7 +216,7 @@ public class CourseControllerTests {
                 new Course(1L, "Bob", null, null, new HashSet<>())
         ));
         when(userService.userById(anyLong(), anyBoolean())).thenReturn(Optional.of(
-                new UserDTO(1L, "Alex", null, new HashSet<>(), null)
+                new UserDTO(1L, "Alex", null, new HashSet<>(), null, null)
         ));
 
         doNothing().when(courseService).saveCourse(any());
@@ -241,7 +241,7 @@ public class CourseControllerTests {
                 new Course(1L, "Bob", null, null, new HashSet<>())
         ));
         when(userService.userById(anyLong(), anyBoolean())).thenReturn(Optional.of(
-                new UserDTO(1L, "NOT_ALEX", null, new HashSet<>(), null)
+                new UserDTO(1L, "NOT_ALEX", null, new HashSet<>(), null, null)
         ));
 
         doNothing().when(courseService).saveCourse(any());

@@ -4,22 +4,25 @@
 
 <header th:fragment="header">
     <div class="row">
-        <div class="col-lg btn-group float-right" role="group">
+        <div class="col-lg btn-group" role="group">
             <a th:classappend="${activePage == 'courses'} ? active"
                th:href="@{/course}" role="button" class="btn btn-outline-secondary">Courses</a>
             <a sec:authorize="hasRole('ADMIN')" th:classappend="${activePage == 'users'} ? active"
                th:href="@{/admin/user}" role="button" class="btn btn-outline-secondary">Users</a>
         </div>
         <div class="col-lg">
-            <a role="button" class="float-right btn btn-outline-secondary"
-               sec:authorize="!isAuthenticated()" th:href="@{/login}">
-                Login
-            </a>
-            <form class="float-right" th:method="post" sec:authorize="isAuthenticated()" th:action="@{/logout}">
-                <button class="btn btn-outline-secondary">
-                    Logout <span sec:authentication="principal.username">Username</span>
-                </button>
+            <a role="button" class="btn btn-outline-secondary"
+               sec:authorize="!isAuthenticated()" th:href="@{/login}">Log in</a>
+            <form class="float-right" th:method="post" sec:authorize="isAuthenticated()"
+                  th:action="@{/logout}">
+                <button class="btn btn-outline-secondary">Log out</button>
             </form>
+        </div>
+        <div class="col-lg">
+            <a role="button" class="float-right btn btn-outline-light"
+               sec:authorize="isAuthenticated()" th:href="@{/profile}">
+                <span sec:authentication="principal.username">Username</span>
+            </a>
         </div>
     </div>
 

@@ -49,7 +49,9 @@ public class UserServiceImpl implements UserService {
                 userDTO.getUsername(),
                 password,
                 userDTO.getCourses(),
-                userDTO.getRoles()));
+                userDTO.getRoles(),
+                userDTO.getAvatarImage()
+                ));
     }
 
     @Override

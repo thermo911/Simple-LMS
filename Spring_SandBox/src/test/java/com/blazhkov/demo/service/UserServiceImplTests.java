@@ -47,9 +47,9 @@ public class UserServiceImplTests {
     @BeforeAll
     void setup() {
         userRepository.saveAll(List.of(
-                new User(1L, "Alex", "root", null, null),
-                new User(2L, "Dima", "pass", null, null),
-                new User(3L, "Jane", "cute", null, null)
+                new User(1L, "Alex", "root", null, null, null),
+                new User(2L, "Dima", "pass", null, null, null),
+                new User(3L, "Jane", "cute", null, null, null)
         ));
     }
 
@@ -88,7 +88,7 @@ public class UserServiceImplTests {
         int totalUsers = userRepository.findAll().size();
         userService.saveUser(
                 UserDTO.fromUser(
-                        new User(null, "Tom", "defender", null, null)
+                        new User(null, "Tom", "defender", null, null, null)
                 ), true);
         assertEquals(totalUsers + 1, userRepository.findAll().size());
 
@@ -97,7 +97,7 @@ public class UserServiceImplTests {
         assertEquals("defender", user.get().getPassword());
 
         userService.saveUser(UserDTO.fromUser(
-                new User(null, "Bob", "defender", null, null)
+                new User(null, "Bob", "defender", null, null, null)
         ), false);
 
         user = userService.userByUsername("Bob");

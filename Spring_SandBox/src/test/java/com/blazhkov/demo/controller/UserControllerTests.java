@@ -42,9 +42,9 @@ public class UserControllerTests {
     @BeforeAll
     void setup() {
         users = List.of(
-                new UserDTO(1L, "Peter", "pass", null, null),
-                new UserDTO(2L, "John", "pass", null, null),
-                new UserDTO(3L, "Jame", "pass", null, null)
+                new UserDTO(1L, "Peter", "pass", null, null, null),
+                new UserDTO(2L, "John", "pass", null, null, null),
+                new UserDTO(3L, "Jame", "pass", null, null, null)
         );
     }
 
@@ -111,7 +111,7 @@ public class UserControllerTests {
         mockMvc.perform(
                 post("/admin/user").with(csrf())
                 .flashAttr("user",
-                        new UserDTO(42L, "Alex", "pass", null, null)))
+                        new UserDTO(42L, "Alex", "pass", null, null, null)))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/admin/user"));
 
@@ -127,7 +127,7 @@ public class UserControllerTests {
         mockMvc.perform(
                 post("/admin/user").with(csrf())
                         .flashAttr("user",
-                                new UserDTO(42L, null, "", null, null)))
+                                new UserDTO(42L, null, "", null, null, null)))
                 .andExpect(model().attributeHasErrors("user"));
 
         verify(userService, never()).saveUser(any(), anyBoolean());
