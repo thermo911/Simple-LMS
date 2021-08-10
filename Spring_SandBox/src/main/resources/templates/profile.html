@@ -22,13 +22,16 @@
                 @<span sec:authentication="principal.username">Profile</span>
             </div>
 
+            <img th:src="@{/profile/avatar}" alt="Upload your avatar!"
+                 class="w-50 rounded">
+
             <form class="form-inline" th:method="post" th:action="@{/profile/avatar}"
                   enctype="multipart/form-data">
                 <div>
                     <input class="form-control" id="avatar" name="avatar" type="file"/>
                 </div>
                 <div>
-                    <button class="btn btn-success">Update avatar</button>
+                    <button class="btn btn-success float-right">Update avatar</button>
                 </div>
             </form>
         </div>

@@ -66,4 +66,24 @@ public class AvatarImageServiceImpl implements AvatarImageService {
             throw new IllegalStateException(e);
         }
     }
+
+    @Override
+    public Optional<String> getContentTypeByUsername(String username) {
+        return avatarImageRepository.findByUsername(username)
+                .map(AvatarImage::getContentType);
+    }
+
+    @Override
+    public Optional<byte[]> getAvatarImageByUsername(String username) {
+        return avatarImageRepository.findByUsername(username)
+                .map(AvatarImage::getFilename)
+                .map(filename -> {
+                    try {
+                        return Files.readAllBytes(Path.of(path, filename));
+                    } catch (IOException e) {
+                        logger.error("Can't read file {}", filename, e);
+                        throw new IllegalStateException(e);
+                    }
+                });
+    }
 }

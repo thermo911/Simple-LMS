@@ -4,7 +4,7 @@
 
 <header th:fragment="header">
     <div class="row">
-        <div class="col-lg btn-group" role="group">
+        <div class="col-lg btn-group h-auto" role="group">
             <a th:classappend="${activePage == 'courses'} ? active"
                th:href="@{/course}" role="button" class="btn btn-outline-secondary">Courses</a>
             <a sec:authorize="hasRole('ADMIN')" th:classappend="${activePage == 'users'} ? active"
@@ -18,9 +18,9 @@
                 <button class="btn btn-outline-secondary">Log out</button>
             </form>
         </div>
-        <div class="col-lg">
-            <a role="button" class="float-right btn btn-outline-light"
-               sec:authorize="isAuthenticated()" th:href="@{/profile}">
+        <div class="col-lg" sec:authorize="isAuthenticated()">
+            <img th:src="@{/profile/avatar}" alt="Profile" width="96" class="rounded float-right">
+            <a th:href="@{/profile}" class="float-right">
                 <span sec:authentication="principal.username">Username</span>
             </a>
         </div>
