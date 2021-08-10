@@ -28,7 +28,7 @@ public class AvatarImageServiceImpl implements AvatarImageService {
     private final AvatarImageRepository avatarImageRepository;
     private final UserService userService;
 
-    @Value("${file.storage.path}")
+    @Value("${file.storage.avatar.path}")
     private String path;
 
     @Autowired

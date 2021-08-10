@@ -1,16 +1,21 @@
 package com.blazhkov.demo.controller;
 
 import com.blazhkov.demo.domain.Course;
+import com.blazhkov.demo.domain.CoverImage;
 import com.blazhkov.demo.domain.User;
 import com.blazhkov.demo.dto.LessonDTO;
 import com.blazhkov.demo.dto.UserDTO;
-import com.blazhkov.demo.exception.CourseNotFoundException;
-import com.blazhkov.demo.exception.UserNotFoundException;
+import com.blazhkov.demo.exception.*;
 import com.blazhkov.demo.service.CourseService;
+import com.blazhkov.demo.service.CoverImageService;
 import com.blazhkov.demo.service.LessonService;
 import com.blazhkov.demo.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -19,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,17 +37,21 @@ import java.util.stream.Collectors;
 @RequestMapping("/course")
 public class CourseController {
 
+    private static final Logger logger = LoggerFactory.getLogger("CourseController");
     private final CourseService courseService;
     private final LessonService lessonService;
     private final UserService userService;
+    private final CoverImageService coverImageService;
 
     @Autowired
     public CourseController(CourseService courseService,
                             LessonService lessonService,
-                            UserService userService) {
+                            UserService userService,
+                            CoverImageService coverImageService) {
         this.courseService = courseService;
         this.lessonService = lessonService;
         this.userService = userService;
+        this.coverImageService = coverImageService;
     }
 
     /* Mappings */
@@ -152,6 +162,35 @@ public class CourseController {
         return String.format("redirect:/course/%d", courseId);
     }
 
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/{id}/cover")
+    public String updateCoverImage(@PathVariable("id") Long id,
+                                   @RequestParam("cover") MultipartFile cover) throws InternalServerError {
+        logger.info("File name {}, file content type {}, file size {}",
+                cover.getOriginalFilename(), cover.getContentType(), cover.getSize());
+        try {
+            coverImageService.save(id, cover.getContentType(), cover.getInputStream());
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new InternalServerError();
+        }
+        return String.format("redirect:/course/%d", id);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/cover")
+    @ResponseBody
+    public ResponseEntity<byte[]> coverImage(@PathVariable("id") Long id) {
+        String contentType = coverImageService.getContentTypeByCourseId(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        byte[] data = coverImageService.getCoverImageByCourseId(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(data);
+    }
+
     /* Exception handlers */
 
     @ExceptionHandler
@@ -165,6 +204,18 @@ public class CourseController {
     public ModelAndView userNotFoundExceptionHandler(UserNotFoundException ex) {
         ModelAndView modelAndView = new ModelAndView("user_not_found");
         modelAndView.setStatus(HttpStatus.NOT_FOUND);
+        return modelAndView;
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Void> resourceNotFoundExceptionHandler(ResourceNotFoundException ex) {
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler
+    public ModelAndView internalServerErrorHandler(InternalServerError er) {
+        ModelAndView modelAndView = new ModelAndView("server_error");
+        modelAndView.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         return modelAndView;
     }
 }

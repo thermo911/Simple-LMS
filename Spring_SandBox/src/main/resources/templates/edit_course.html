@@ -21,6 +21,20 @@
     </div>
 
     <div class="row">
+        <img th:src="@{/course/{id}/cover(id = ${course.id})}"
+            alt="Without cover" class="rounded h-25">
+        <form sec:authorize="hasRole('ADMIN')"
+            class="form-inline" th:method="post"
+              th:action="@{/course/{id}/cover(id = ${course.id})}"
+              enctype="multipart/form-data">
+            <div>
+                <input class="form-control" id="cover" name="cover" type="file"/>
+            </div>
+            <div>
+                <button class="btn btn-success float-right">Update cover</button>
+            </div>
+        </form>
+
         <form class="form" th:object="${course}" th:method="post" th:action="@{/course}">
             <input type="hidden" th:field="*{id}">
             <input type="hidden" th:field="*{users}">

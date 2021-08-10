@@ -2,6 +2,7 @@ package com.blazhkov.demo.controller;
 
 import com.blazhkov.demo.exception.InternalServerError;
 import com.blazhkov.demo.exception.NotFoundException;
+import com.blazhkov.demo.exception.ResourceNotFoundException;
 import com.blazhkov.demo.service.AvatarImageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,9 +58,9 @@ public class ProfileController {
     @ResponseBody
     public ResponseEntity<byte[]> avatarImage(Authentication auth) {
         String contentType = avatarImageService.getContentTypeByUsername(auth.getName())
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(ResourceNotFoundException::new);
         byte[] data = avatarImageService.getAvatarImageByUsername(auth.getName())
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(ResourceNotFoundException::new);
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.parseMediaType(contentType))
@@ -74,7 +75,7 @@ public class ProfileController {
     }
 
     @ExceptionHandler
-    public ResponseEntity<Void> notFoundExceptionHandler(NotFoundException ex) {
+    public ResponseEntity<Void> resourceNotFoundExceptionHandler(ResourceNotFoundException ex) {
         return ResponseEntity.notFound().build();
     }
 }

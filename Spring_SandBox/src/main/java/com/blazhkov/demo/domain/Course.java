@@ -34,6 +34,9 @@ public class Course {
     @ManyToMany
     private Set<User> users;
 
+    @OneToOne(mappedBy = "course", cascade = CascadeType.REMOVE)
+    private CoverImage coverImage;
+
     @Override
     public int hashCode() {
         return Objects.hash(id);
