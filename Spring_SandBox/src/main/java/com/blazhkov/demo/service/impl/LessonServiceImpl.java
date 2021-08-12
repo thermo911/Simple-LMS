@@ -18,7 +18,7 @@ public class LessonServiceImpl implements LessonService {
     private final CourseRepository courseRepository;
 
     @Autowired
-    private LessonServiceImpl(LessonRepository lessonRepository, CourseRepository courseRepository) {
+    public LessonServiceImpl(LessonRepository lessonRepository, CourseRepository courseRepository) {
         this.lessonRepository = lessonRepository;
         this.courseRepository = courseRepository;
     }

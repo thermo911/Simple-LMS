@@ -7,8 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 public class SpringSandBoxApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SpringSandBoxApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SpringSandBoxApplication.class, args);
+    }
 
 }

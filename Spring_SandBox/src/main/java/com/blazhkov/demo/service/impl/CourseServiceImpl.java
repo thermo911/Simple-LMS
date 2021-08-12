@@ -25,7 +25,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> coursesByTitleWithPrefix(String prefix) {
-        return repository.findByTitleLike(prefix);
+        return repository.findByTitleLike(prefix + "%");
     }
 
     @Override
