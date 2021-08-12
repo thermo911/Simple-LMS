@@ -78,9 +78,11 @@ public class UserController {
     public String deleteUser(@PathVariable(name = "id") Long id) {
         User user = User.fromDTO(userService.userById(id, false)
                 .orElseThrow(UserNotFoundException::new));
-        for (Course c: user.getCourses()) {
-            c.getUsers().remove(user);
-            courseService.saveCourse(c);
+        if (user.getCourses() != null) {
+            for (Course c : user.getCourses()) {
+                c.getUsers().remove(user);
+                courseService.saveCourse(c);
+            }
         }
         userService.deleteUserById(id);
         return "redirect:/admin/user";
