@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title sec:authentication="principal.username">
+    <title th:text="${username}">
         Profile
     </title>
     <!-- Required meta tags -->
@@ -19,13 +19,15 @@
     <div class="row">
         <div class="col-lg">
             <div class="display-2">
-                @<span sec:authentication="principal.username">Profile</span>
+                @<span th:text="${username}">Profile</span>
             </div>
 
-            <img th:src="@{/profile/avatar}" alt="Upload your avatar!"
+            <img th:src="@{/profile/{username}/avatar(username = ${username})}"
+                 alt="Upload your avatar!"
                  class="w-50 rounded">
 
-            <form class="form-inline" th:method="post" th:action="@{/profile/avatar}"
+            <form th:if="${who == 'self'}" class="form-inline w-50" th:method="post"
+                  th:action="@{/profile/{username}/avatar(username = ${username})}"
                   enctype="multipart/form-data">
                 <div>
                     <input class="form-control" id="avatar" name="avatar" type="file"/>
@@ -35,6 +37,18 @@
                 </div>
             </form>
         </div>
+        <div class="col-lg">
+            <div class="display-3">Info</div>
+            <div>Assigned to <span th:text="${numOfCourses}">0</span> course(s)</div>
+            <div th:if="${who == 'self'}" class="btn-group" role="group">
+                <a role="button" th:href="@{/user/{id}(id = ${userId})}"
+                   class="btn btn-outline-success">Edit profile</a>
+                <a role="button" th:href="@{/course}"
+                   class="btn btn-outline-success">Explore courses</a>
+            </div>
+        </div>
+
+    </div>
     </div>
 
 

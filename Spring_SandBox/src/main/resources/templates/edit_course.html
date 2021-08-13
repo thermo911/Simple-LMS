@@ -115,10 +115,12 @@
                     <tr th:unless="${users.empty}" th:each="user : ${users}">
                         <td th:text="${user.id}">1</td>
                         <td>
-                            <a th:text="${user.username}" th:href="@{/admin/user/{id}(id = ${user.id})}">User name</a>
+                            <a th:text="${user.username}" th:href="@{/user/{id}(id = ${user.id})}">User name</a>
                         </td>
                         <td>
-                            <form th:method="delete"
+                            <form th:if="${user.username == #authentication.name
+                                            OR #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                                  th:method="delete"
                                   th:action="@{/course/{id}/remove(id = ${course.id}, userId = ${user.id})}">
                                 <button type="submit" class="btn btn-outline-danger">Remove</button>
                             </form>

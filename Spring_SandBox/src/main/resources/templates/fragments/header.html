@@ -7,8 +7,8 @@
         <div class="col-lg btn-group h-auto" role="group">
             <a th:classappend="${activePage == 'courses'} ? active"
                th:href="@{/course}" role="button" class="btn btn-outline-secondary">Courses</a>
-            <a sec:authorize="hasRole('ADMIN')" th:classappend="${activePage == 'users'} ? active"
-               th:href="@{/admin/user}" role="button" class="btn btn-outline-secondary">Users</a>
+            <a sec:authorize="isAuthenticated()" th:classappend="${activePage == 'users'} ? active"
+               th:href="@{/user}" role="button" class="btn btn-outline-secondary">Users</a>
         </div>
         <div class="col-lg">
             <a role="button" class="btn btn-outline-secondary"
@@ -19,8 +19,11 @@
             </form>
         </div>
         <div class="col-lg" sec:authorize="isAuthenticated()">
-            <img th:src="@{/profile/avatar}" alt="Profile" width="96" class="rounded float-right">
-            <a th:href="@{/profile}" class="float-right">
+            <img th:src="@{/profile/{username}/avatar(username = ${#authentication.name})}"
+                 th:classappend="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? 'border border-warning'"
+                 alt="Profile" width="96" class="rounded float-right">
+            <a th:href="@{/profile/{username}(username = ${#authentication.name})}"
+               class="float-right">
                 <span sec:authentication="principal.username">Username</span>
             </a>
         </div>

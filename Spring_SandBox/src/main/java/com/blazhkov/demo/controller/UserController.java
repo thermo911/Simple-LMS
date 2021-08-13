@@ -11,6 +11,9 @@ import com.blazhkov.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,9 +22,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @Controller
-@RequestMapping("/admin/user")
+@RequestMapping("/user")
 public class UserController {
     UserService userService;
     CourseService courseService;
@@ -42,6 +46,7 @@ public class UserController {
     }
 
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public String userTable(Model model) {
         model.addAttribute("users", userService.allUsers());
@@ -49,31 +54,47 @@ public class UserController {
         return "users";
     }
 
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
-    public String userForm(Model model, @PathVariable(name = "id") Long id) {
+    public String userForm(Model model,
+                           Authentication auth,
+                           @PathVariable(name = "id") Long id) {
         UserDTO user = userService.userById(id, false).orElseThrow(UserNotFoundException::new);
-        model.addAttribute("user", user);
-        return "edit_user";
+        if (auth.getName().equals(user.getUsername()) ||
+                auth.getAuthorities()
+                        .contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            model.addAttribute("user", user);
+            return "edit_user";
+        }
+        return "redirect:/access_denied";
     }
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/new")
     public String userForm(Model model) {
-        model.addAttribute("user", new UserDTO());
+        model.addAttribute("user",
+                UserDTO
+                .builder()
+                .roles(Set.of(new Role(null, "ROLE_USER", null))));
         return "edit_user";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping
     public String submitUserForm(@Valid @ModelAttribute("user") UserDTO user,
-                                 BindingResult bindingResult) {
+                                 BindingResult bindingResult,
+                                 Authentication auth) {
+        if (user.getUsername().equals(auth.getName())
+            || auth.getAuthorities()
+                .contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
         if (bindingResult.hasErrors()) {
             return "edit_user";
         }
         userService.saveUser(user, false);
-        return "redirect:/admin/user";
+        return "redirect:/user";
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable(name = "id") Long id) {
         User user = User.fromDTO(userService.userById(id, false)
@@ -85,7 +106,7 @@ public class UserController {
             }
         }
         userService.deleteUserById(id);
-        return "redirect:/admin/user";
+        return "redirect:/user";
     }
 
     @ExceptionHandler
