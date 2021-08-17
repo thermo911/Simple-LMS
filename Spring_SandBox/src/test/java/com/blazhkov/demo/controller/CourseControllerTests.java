@@ -43,8 +43,8 @@ public class CourseControllerTests {
     @BeforeAll
     void setup() {
         courses = List.of(
-                new Course(1L, "Alex", "Test1", null, null),
-                new Course(2L, "Dima", "Test2", null, null)
+                new Course(1L, "Alex", "Test1", null, null, null),
+                new Course(2L, "Dima", "Test2", null, null, null)
         );
     }
 
@@ -64,7 +64,7 @@ public class CourseControllerTests {
     @WithMockUser(roles = "ADMIN")
     void courseFormTest () throws Exception {
         when(courseService.courseById(1L)).thenReturn(
-                Optional.of(new Course(1L, "Alex", "Test", new ArrayList<>(), new HashSet<>()))
+                Optional.of(new Course(1L, "Alex", "Test", new ArrayList<>(), new HashSet<>(), null))
         );
 
         mockMvc.perform(get("/course/{id}", 1L))
@@ -100,7 +100,7 @@ public class CourseControllerTests {
         mockMvc.perform(post("/course")
                 .with(csrf())
                 .flashAttr("course",
-                        new Course(1L, "Alex", "Test", null, null)))
+                        new Course(1L, "Alex", "Test", null, null, null)))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/course"));
         verify(courseService, times(1)).saveCourse(any());
@@ -114,7 +114,7 @@ public class CourseControllerTests {
         mockMvc.perform(post("/course")
                 .with(csrf())
                 .flashAttr("course",
-                        new Course(1L, null, "", null, null)))
+                        new Course(1L, null, "", null, null, null)))
                 .andExpect(model().attributeHasFieldErrors("course"));
 
         verify(courseService, never()).saveCourse(any());
@@ -137,7 +137,7 @@ public class CourseControllerTests {
     @WithMockUser(roles = "USER", username = "Alex")
     void assignUserFormUserTest() throws Exception {
         when(userService.userByUsername("Alex")).thenReturn(Optional.of(
-                new User(1L, "Alex", null, null, null)
+                new User(1L, "Alex", null, null, null, null)
         ));
 
         mockMvc.perform(get("/course/{id}/assign", 1L)
@@ -163,10 +163,10 @@ public class CourseControllerTests {
     @WithMockUser(roles = "ADMIN")
     void submitAssignUserFormTest() throws Exception {
         when(courseService.courseById(anyLong())).thenReturn(Optional.of(
-                new Course(1L, "Alex", null, null, new HashSet<>())
+                new Course(1L, "Alex", null, null, new HashSet<>(), null)
         ));
         when(userService.userById(anyLong(), anyBoolean())).thenReturn(Optional.of(
-                new UserDTO(1L, "John", null, new HashSet<>(), null)
+                new UserDTO(1L, "John", null, new HashSet<>(), null, null)
         ));
 
         doNothing().when(courseService).saveCourse(any());
@@ -188,10 +188,10 @@ public class CourseControllerTests {
     @WithMockUser(roles = "ADMIN", username = "Alex")
     void removeUserFromCourseAdminTest() throws Exception {
         when(courseService.courseById(anyLong())).thenReturn(Optional.of(
-                new Course(1L, "Bob", null, null, new HashSet<>())
+                new Course(1L, "Bob", null, null, new HashSet<>(), null)
         ));
         when(userService.userById(anyLong(), anyBoolean())).thenReturn(Optional.of(
-                new UserDTO(1L, "John", null, new HashSet<>(), null)
+                new UserDTO(1L, "John", null, new HashSet<>(), null, null)
         ));
 
         doNothing().when(courseService).saveCourse(any());
@@ -213,10 +213,10 @@ public class CourseControllerTests {
     @WithMockUser(roles = "USER", username = "Alex")
     void removeUserFromCourseUserTest() throws Exception { // User removes themself
         when(courseService.courseById(anyLong())).thenReturn(Optional.of(
-                new Course(1L, "Bob", null, null, new HashSet<>())
+                new Course(1L, "Bob", null, null, new HashSet<>(), null)
         ));
         when(userService.userById(anyLong(), anyBoolean())).thenReturn(Optional.of(
-                new UserDTO(1L, "Alex", null, new HashSet<>(), null)
+                new UserDTO(1L, "Alex", null, new HashSet<>(), null, null)
         ));
 
         doNothing().when(courseService).saveCourse(any());
@@ -238,10 +238,10 @@ public class CourseControllerTests {
     @WithMockUser(roles = "USER", username = "Alex")
     void removeUserFromCourseUserNotSelfTest() throws Exception { // User tries to remove other
         when(courseService.courseById(anyLong())).thenReturn(Optional.of(
-                new Course(1L, "Bob", null, null, new HashSet<>())
+                new Course(1L, "Bob", null, null, new HashSet<>(), null)
         ));
         when(userService.userById(anyLong(), anyBoolean())).thenReturn(Optional.of(
-                new UserDTO(1L, "NOT_ALEX", null, new HashSet<>(), null)
+                new UserDTO(1L, "NOT_ALEX", null, new HashSet<>(), null, null)
         ));
 
         doNothing().when(courseService).saveCourse(any());

@@ -36,10 +36,10 @@ public class CourseServiceImplTests {
     @BeforeAll
     void setup() {
         courseRepository.saveAll(List.of(
-                new Course(1L, "Alex", "Course1", null, null),
-                new Course(2L, "Dima", "Course2", null, null),
-                new Course(3L, "John", "Course3", null, null),
-                new Course(4L, "Lise", "NotCourse", null, null)
+                new Course(1L, "Alex", "Course1", null, null, null),
+                new Course(2L, "Dima", "Course2", null, null, null),
+                new Course(3L, "John", "Course3", null, null, null),
+                new Course(4L, "Lise", "NotCourse", null, null, null)
         ));
     }
 
@@ -77,7 +77,7 @@ public class CourseServiceImplTests {
     @Test
     void saveCourseTest() {
         int totalCourses = courseRepository.findAll().size();
-        courseService.saveCourse(new Course(null, "Sally", "The art of not giving a fuck", null, null));
+        courseService.saveCourse(new Course(null, "Sally", "The art of not giving a fuck", null, null, null));
         assertEquals(totalCourses + 1, courseRepository.findAll().size());
     }
 

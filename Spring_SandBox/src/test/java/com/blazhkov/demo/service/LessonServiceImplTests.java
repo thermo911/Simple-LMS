@@ -30,8 +30,8 @@ public class LessonServiceImplTests {
     @Autowired
     private LessonServiceImpl lessonService;
 
-    private final Course c1 = new Course(1L, "Alex", "Course1", null, null);
-    private final Course c2 = new Course(2L, "Dima", "Course2", null, null);
+    private final Course c1 = new Course(1L, "Alex", "Course1", null, null, null);
+    private final Course c2 = new Course(2L, "Dima", "Course2", null, null, null);
 
     @TestConfiguration
     static class TestConfig {

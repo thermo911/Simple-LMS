@@ -37,7 +37,7 @@ public class LessonControllerTests {
     void lessonFormTest() throws Exception {
         when(lessonService.lessonById(1L)).thenReturn(
                 Optional.of(new Lesson(1L, "test", null,
-                        new Course(1L, null, null, null, null)))
+                        new Course(1L, null, null, null, null, null)))
         );
 
         mockMvc.perform(get("/lesson/{id}", 1L))
@@ -100,7 +100,7 @@ public class LessonControllerTests {
     void deleteLessonTest() throws Exception {
         when(lessonService.lessonById(1L)).thenReturn(
                 Optional.of(new Lesson(1L, "test", null,
-                        new Course(1L, null, null, null, null)))
+                        new Course(1L, null, null, null, null, null)))
         );
         doNothing().when(lessonService).removeLesson(any());
 

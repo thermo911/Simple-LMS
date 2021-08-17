@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title th:text="${username}">
+        Profile
+    </title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-lg">
+            <div class="display-2">
+                @<span th:text="${username}">Profile</span>
+            </div>
+
+            <img th:src="@{/profile/{username}/avatar(username = ${username})}"
+                 alt="Upload your avatar!"
+                 class="w-50 rounded">
+
+            <form th:if="${who == 'self'}" class="form-inline w-50" th:method="post"
+                  th:action="@{/profile/{username}/avatar(username = ${username})}"
+                  enctype="multipart/form-data">
+                <div>
+                    <input class="form-control" id="avatar" name="avatar" type="file"/>
+                </div>
+                <div>
+                    <button class="btn btn-success float-right">Update avatar</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg">
+            <div class="display-3">Info</div>
+            <div>Assigned to <span th:text="${numOfCourses}">0</span> course(s)</div>
+            <div th:if="${who == 'self'}" class="btn-group" role="group">
+                <a role="button" th:href="@{/user/{id}(id = ${userId})}"
+                   class="btn btn-outline-success">Edit profile</a>
+                <a role="button" th:href="@{/course}"
+                   class="btn btn-outline-success">Explore courses</a>
+            </div>
+        </div>
+
+    </div>
+    </div>
+
+
+
+
+</body>
+</html>
