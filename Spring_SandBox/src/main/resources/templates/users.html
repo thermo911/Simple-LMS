@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Users</title>
     <!-- Обязательные метатеги -->
@@ -16,8 +17,8 @@
 <div class="container">
     <header th:replace="fragments/header :: header"></header>
     <h1 class="display-1">Users</h1>
-    <div class="row">
-        <form th:method="get" th:action="@{/admin/user/new}">
+    <div sec:authorize="hasRole('ADMIN')" class="row">
+        <form th:method="get" th:action="@{/user/new}">
             <button type="submit" class="btn btn-outline-success">New user</button>
         </form>
     </div>
@@ -27,17 +28,22 @@
         <tr>
             <th>id</th>
             <th>Name</th>
-            <th>Action</th>
+            <th sec:authorize="hasRole('ADMIN')">Action</th>
         </tr>
         </thead>
         <tbody>
         <tr th:unless="${users.empty}" th:each="user : ${users}">
             <td th:text="${user.id}">1</td>
             <td>
-                <a th:text="${user.username}" th:href="@{/admin/user/{id}(id = ${user.id})}">User name</a>
+                <a sec:authorize="hasRole('ADMIN')"
+                   th:text="${user.username}"
+                   th:href="@{/user/{id}(id = ${user.id})}">User name</a>
+                <a sec:authorize="!hasRole('ADMIN')"
+                   th:text="${user.username}"
+                   th:href="@{/profile/{username}(username = ${user.username})}">User name</a>
             </td>
-            <td>
-                <form th:method="delete" th:action="@{/admin/user/{id}(id = ${user.id})}">
+            <td sec:authorize="hasRole('ADMIN')">
+                <form th:method="delete" th:action="@{/user/{id}(id = ${user.id})}">
                     <button class="btn btn-outline-danger" type="submit">Delete</button>
                 </form>
             </td>

@@ -31,6 +31,9 @@ public class User {
     @ManyToMany
     private Set<Role> roles;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private AvatarImage avatarImage;
+
     @Override
     public int hashCode() {
         return Objects.hash(id);
@@ -51,6 +54,7 @@ public class User {
         user.password = dto.getPassword();
         user.courses = dto.getCourses();
         user.roles = dto.getRoles();
+        user.avatarImage = dto.getAvatarImage();
         return user;
     }
 }

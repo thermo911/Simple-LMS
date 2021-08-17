@@ -1,5 +1,6 @@
 package com.blazhkov.demo.dto;
 
+import com.blazhkov.demo.domain.AvatarImage;
 import com.blazhkov.demo.domain.Course;
 import com.blazhkov.demo.domain.Role;
 import com.blazhkov.demo.domain.User;
@@ -25,6 +26,8 @@ public class UserDTO {
     private Set<Course> courses;
 
     private Set<Role> roles;
+
+    private AvatarImage avatarImage;
 
     public static UserDTO fromUser(User user) {
         UserDTO dto = new UserDTO();
